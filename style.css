@@ -5,79 +5,48 @@
   box-sizing: border-box;
 }
 
-/* Colori: il tema scuro cambia solo le variabili */
+/* Colori */
 :root {
-  --bg: #fff;
-  --fg: #111;
-  --muted: #64748b;
-  --line: #e2e8f0;
-  --ctrl: #fff;
-  --ctrl-line: #94a3b8;
-  --active: #1e293b;
-  --active-fg: #fff;
-  --danger: #b91c1c;
-}
-
-body.dark {
-  --bg: #0f172a;
-  --fg: #e2e8f0;
-  --line: #334155;
-  --ctrl: #1e293b;
-  --ctrl-line: #475569;
-  --active: #e2e8f0;
-  --active-fg: #0f172a;
-  --danger: #f87171;
+  --fg: #222;
+  --title: #1f2a44;
+  --line: #e6e6e6;
+  --ctrl-line: #666;
+  --danger: #b84a4a;
 }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   color: var(--fg);
-  background: var(--bg);
+  background: #fff;
 }
 
-/* Layout */
+/* Colonna centrata */
 header,
-main,
-footer {
-  max-width: 680px;
+main {
+  max-width: 564px;
   margin: 0 auto;
   padding: 0 16px;
 }
 
 header {
-  padding-top: 32px;
-}
-
-header p,
-footer {
-  color: var(--muted);
-  font-size: .9rem;
-}
-
-footer {
-  padding: 24px 16px;
+  padding-top: 40px;
 }
 
 h1 {
   font-size: 2rem;
-  margin-bottom: 4px;
+  color: var(--title);
 }
 
-h2 {
-  font-size: 1.1rem;
-  margin: 20px 0 8px;
-}
-
-/* Controlli */
+/* Pulsanti e campi */
 button,
-input,
-select {
+input {
   font: inherit;
-  padding: 8px 12px;
+  font-size: 15px;
+  padding: 8px 14px;
   border: 1px solid var(--ctrl-line);
-  border-radius: 6px;
-  background: var(--ctrl);
+  border-radius: 4px;
+  background: #fff;
   color: inherit;
 }
 
@@ -86,120 +55,59 @@ button {
 }
 
 button.attiva {
-  background: var(--active);
-  color: var(--active-fg);
-  border-color: var(--active);
+  background: var(--title);
+  color: #fff;
+  border-color: var(--title);
+  font-weight: 700;
 }
 
-form,
+form {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+form input {
+  flex: 1;
+}
+
 .controlli {
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
-  margin: 16px 0;
+  margin: 32px 0 12px;
 }
 
-form input,
-.controlli input {
-  flex: 1;
-  min-width: 180px;
-}
-
-/* Lista, card, tabella */
-ul,
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-li,
-td,
-th {
-  padding: 8px 0;
-  border-bottom: 1px solid var(--line);
-  text-align: left;
-}
-
-th {
-  font-size: .85rem;
-  color: var(--muted);
+/* Lista */
+ul {
+  list-style: none;
 }
 
 li {
   display: flex;
   align-items: center;
   gap: 8px;
-  list-style: none;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
 }
 
-li span,
-li .edit {
+li span {
   flex: 1;
 }
 
-button[data-az] {
-  padding: 4px 8px;
-  font-size: .85rem;
-}
-
-button[data-az="elimina"] {
+li button {
+  padding: 2px 8px;
+  font-size: 13px;
   color: var(--danger);
   border-color: var(--danger);
 }
 
 .fatto span {
-  color: var(--muted);
+  color: #8a8a8a;
   text-decoration: line-through;
 }
 
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-}
-
-/* Statistiche */
 .statistiche {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 24px;
-  margin: 16px 0;
-}
-
-.num {
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-.num small {
-  display: block;
-  font-size: .75rem;
-  font-weight: 400;
-  color: var(--muted);
-}
-
-.barra {
-  flex-basis: 100%;
-  height: 8px;
-  background: var(--line);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.barra div {
-  height: 100%;
-  background: #22c55e;
-  transition: width .3s;
+  margin-top: 16px;
 }
 
 /* Notifica nascosta di default */
@@ -208,7 +116,7 @@ button[data-az="elimina"] {
   margin: 16px 0;
   padding: 10px 14px;
   border: 1px solid #facc15;
-  border-radius: 6px;
+  border-radius: 4px;
   background: #fef9c3;
   color: #111;
 }

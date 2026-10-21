@@ -12,29 +12,27 @@ REGOLE
 */
 
 
-/* STATO
-   In cima al file definisci poche variabili globali:
-   - un array di oggetti come dato principale (es. libri, ricette, film, ...)
-   - una variabile per il filtro corrente
-   - una variabile per l'ordinamento corrente
-   - una variabile per la stringa di ricerca corrente
-*/
-
-/* SCRIVI QUI LA TUA RISPOSTA */
+/* STATO — un array di oggetti e il filtro corrente */
+const $ = s => document.querySelector(s);
+let stato = { elementi: [], filtro: "tutti" };
 
 
-/* RENDER()
-   Una sola funzione che ridipinge la lista. A ogni chiamata:
-   1) parte dall'array completo,
-   2) filtra,
-   3) ordina,
-   4) svuota il container DOM,
-   5) ricrea gli elementi DOM per gli oggetti risultanti.
-   Aggiorna anche conteggi e statistiche.
-   Salva lo stato in localStorage in fondo a render() (cerca tu come funziona).
-*/
+/* RENDER() — filtra, ridisegna la lista, aggiorna il conteggio, salva in localStorage */
+const esc = s => s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const filtri = { tutti: () => true, attivi: x => !x.fatto, completati: x => x.fatto };
 
-/* SCRIVI QUI LA TUA RISPOSTA */
+function render() {
+  $("#lista").innerHTML = stato.elementi.filter(filtri[stato.filtro]).map(x => `
+    <li class="${x.fatto ? "fatto" : ""}">
+      <input type="checkbox" data-id="${x.id}" ${x.fatto ? "checked" : ""}>
+      <span>${esc(x.testo)}</span>
+      <button data-id="${x.id}">Elimina</button>
+    </li>`).join("");
+  $("#statistiche").innerHTML = `<p>Attivi: ${stato.elementi.filter(x => !x.fatto).length}</p>`;
+  document.querySelectorAll("[data-filtro]").forEach(b => b.classList.toggle("attiva", b.dataset.filtro === stato.filtro));
+  localStorage.setItem("dati", JSON.stringify(stato));
+  console.log("render:", stato);
+}
 
 
 /* FORM CON VALIDAZIONE
@@ -46,27 +44,38 @@ REGOLE
    Id univoco con Date.now().
 */
 
-/* SCRIVI QUI LA TUA RISPOSTA */
+$("#form").addEventListener("submit", e => {
+  e.preventDefault();
+  const testo = $("#testo").value.trim();
+  if (!testo) return notifica("Scrivi cosa devi fare!");
+  stato.elementi.push({ id: Date.now(), testo, fatto: false });
+  console.log("aggiunto:", stato.elementi.at(-1));
+  e.target.reset();
+  render();
+});
 
 
-/* INTERAZIONI BASE — eliminare, modificare, contare
-   - Elimina: filter per id, render(). Event delegation sul container.
-   - Modifica in-place: button "Modifica". Al click il testo diventa <input>,
-     si conferma con Invio o blur.
-   - Conteggi dinamici dentro render().
-*/
+/* INTERAZIONI — spunta ed elimina, con event delegation su #lista */
+$("#lista").addEventListener("change", e => {
+  stato.elementi.find(x => x.id === +e.target.dataset.id).fatto = e.target.checked;
+  console.log("spunta:", e.target.dataset.id, e.target.checked);
+  render();
+});
 
-/* SCRIVI QUI LA TUA RISPOSTA */
+$("#lista").addEventListener("click", e => {
+  if (e.target.tagName !== "BUTTON") return;
+  stato.elementi = stato.elementi.filter(x => x.id !== +e.target.dataset.id);
+  console.log("elimina:", e.target.dataset.id);
+  render();
+});
 
 
-/* RICERCA, FILTRO, ORDINAMENTO
-   - Ricerca live: <input> con event "input". Salva in stato e render().
-   - Filtro: <select> con event "change". Salva in stato e render().
-   - Ordinamento: due button (o select). Salva in stato e render().
-   I tre si compongono dentro render() in fila.
-*/
-
-/* SCRIVI QUI LA TUA RISPOSTA */
+/* FILTRO — pulsanti Tutti / Attivi / Completati */
+document.querySelectorAll("[data-filtro]").forEach(b => b.addEventListener("click", () => {
+  stato.filtro = b.dataset.filtro;
+  console.log("filtro:", stato.filtro);
+  render();
+}));
 
 
 /* NOTIFICHE TEMPORANEE
@@ -74,15 +83,15 @@ REGOLE
    lo mostra (display: block), poi dopo 3000ms (setTimeout) lo nasconde.
 */
 
-/* SCRIVI QUI LA TUA RISPOSTA */
-
-
-/* TEMA CHIARO/SCURO
-   Un button che chiama document.body.classList.toggle("dark").
-   In CSS scrivi le regole opposte (es. body.dark { background: #111; ... }).
-*/
-
-/* SCRIVI QUI LA TUA RISPOSTA */
+let timer;
+function notifica(testo) {
+  const n = $("#notifica");
+  console.log("notifica:", testo);
+  n.textContent = testo;
+  n.style.display = "block";
+  clearTimeout(timer);
+  timer = setTimeout(() => (n.style.display = "none"), 3000);
+}
 
 
 /* PERSISTENZA — localStorage (cerca tu su MDN)
@@ -93,47 +102,9 @@ REGOLE
        if (salvato) stato = JSON.parse(salvato);
 */
 
-/* SCRIVI QUI LA TUA RISPOSTA */
+const salvato = localStorage.getItem("dati");
+if (salvato) stato = JSON.parse(salvato);
+console.log("caricato:", stato);
 
-
-/* RIORDINO ↑ ↓
-   Due button su ogni elemento. Click su ↑ scambia con il precedente nell'array,
-   ↓ con il successivo. Event delegation. Poi render().
-*/
-
-/* SCRIVI QUI LA TUA RISPOSTA */
-
-
-/* ESPORTAZIONE / IMPORTAZIONE JSON (cerca tu su MDN)
-   - Esporta: crea un Blob con JSON.stringify(stato), genera un URL con
-     URL.createObjectURL e simula il click su un <a download>.
-   - Importa: <input type="file"> + FileReader per leggere il contenuto come
-     testo, JSON.parse, sostituisci lo stato, render().
-*/
-
-/* SCRIVI QUI LA TUA RISPOSTA */
-
-
-/* STATISTICHE GRAFICHE
-   Almeno due indicatori: contatori grandi e/o barre orizzontali
-   (<div> con width: X% in base al dato). Aggiorna dentro render().
-*/
-
-/* SCRIVI QUI LA TUA RISPOSTA */
-
-
-/* MULTI-VISTA — lista / card / tabella
-   Una variabile globale "vista" che render() legge per decidere quale HTML
-   produrre. Tre button cambiano "vista" e chiamano render().
-*/
-
-/* SCRIVI QUI LA TUA RISPOSTA */
-
-
-/* CATEGORIE
-   Aggiungi un campo categoria nello schema. Nel form un <select> per sceglierla.
-   In render(), raggruppa con reduce in { categoria: [elementi] } e disegna un
-   header per categoria con sotto la lista di quella categoria.
-*/
-
-/* SCRIVI QUI LA TUA RISPOSTA */
+/* AVVIO */
+render();
