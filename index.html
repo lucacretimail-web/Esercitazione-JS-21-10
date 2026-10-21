@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week Project — Settimana III</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <!-- Titolo dell'app + sottotitolo + button tema chiaro/scuro -->
+    <h1>Le mie cose da fare</h1>
+    <p>Esercitazione JavaScript</p>
+    <button id="tema">Tema</button>
+  </header>
+
+  <main>
+
+    <section class="form">
+      <!-- Form di inserimento di nuovi elementi -->
+      <form id="form">
+        <input id="testo" placeholder="Cosa devi fare?">
+        <select id="categoria"><option>Casa</option><option>Studio</option><option>Lavoro</option></select>
+        <button>Aggiungi</button>
+      </form>
+    </section>
+
+    <section class="controlli">
+      <!-- Ricerca live, filtro (select), ordinamento -->
+      <input id="cerca" placeholder="Cerca...">
+      <select id="filtro"><option value="tutti">Tutti</option><option value="attivi">Attivi</option><option value="completati">Completati</option></select>
+      <select id="ordine"><option value="">Ordine originale</option><option value="az">A → Z</option><option value="za">Z → A</option></select>
+      <button data-vista="lista">Lista</button>
+      <button data-vista="card">Card</button>
+      <button data-vista="tabella">Tabella</button>
+    </section>
+
+    <section class="statistiche" id="statistiche">
+      <!-- Conteggi e/o barre orizzontali -->
+    </section>
+
+    <section class="lista" id="lista">
+      <!-- Container che render() ricostruisce a ogni cambio di stato -->
+    </section>
+
+    <div id="notifica"></div>
+
+  </main>
+
+  <footer>
+    <!-- Autore, anno -->
+    <p>Luca Creti · 2026</p>
+  </footer>
+
+</body>
+</html>
